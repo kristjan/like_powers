@@ -1,8 +1,8 @@
 package main
 
 import (
+	"./pqueue64"
 	"fmt"
-	"github.com/kristjan/pqueue64"
 	"math"
 	"os"
 	"strings"
