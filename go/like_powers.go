@@ -30,39 +30,41 @@ func AddTargets(targetQueue *pqueue64.PQueue, seen map[Target]bool, base int, po
 func Search(base int, power int) ([]int, bool) {
 	target := int64(math.Pow(float64(base), float64(power)))
 
-	set := make([]int, power-1)
-	for i, _ := range set {
-		set[i] = 1
-	}
-
-	var sum int64
-
-	for {
-		sum = 0
-		for _, v := range set {
-			sum += int64(math.Pow(float64(v), float64(power)))
+	for addends := 2; addends < power; addends++ {
+		set := make([]int, addends)
+		for i, _ := range set {
+			set[i] = 1
 		}
 
-		// We matched!
-		if sum == target {
-			return set, true
-		}
+		var sum int64
 
-		i := 0
-		for i < len(set) {
-			set[i] += 1
-			if set[i] < base {
+		for {
+			sum = 0
+			for _, v := range set {
+				sum += int64(math.Pow(float64(v), float64(power)))
+			}
+
+			// We matched!
+			if sum == target {
+				return set, true
+			}
+
+			i := 0
+			for i < len(set) {
+				set[i] += 1
+				if set[i] < base {
+					break
+				}
+				i += 1
+			}
+			if i == len(set) {
 				break
 			}
-			i += 1
-		}
-		if i == len(set) {
-			return nil, false
-		}
 
-		for i > 0 {
-			set[i-1] = set[i]
-			i -= 1
+			for i > 0 {
+				set[i-1] = set[i]
+				i -= 1
+			}
 		}
 	}
 
